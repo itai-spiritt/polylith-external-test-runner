@@ -9,7 +9,7 @@ dependency.
 ## Usage
 
 Ensure you are using a recent version Polylith that supports
-external test runners (v0.2.22-SNAPSHOT #2 or later).
+external test runners and dialects (v0.3.0 or later).
 
 You must be using a `:poly` alias in your `deps.edn` file to run the Polylith
 tool and tests, since you need to be able to modify the classpath to add an
@@ -20,8 +20,7 @@ make this test-runner available:
 
 ```clojure
 io.github.seancorfield/polylith-external-test-runner
-{;:git/tag "v0.6.1" :git/sha "d0f51c2" -- supports Polylith 0.2.18 and later
- :git/sha ""
+{:git/tag "v0.7.0" :git/sha "..." -- supports Polylith 0.3.0 and later
  :deps/root "projects/runner"}
 ```
 
@@ -75,7 +74,7 @@ making it easier to reuse existing aliases for the testing context.
 
 ## Test Configuration
 
-> Note: this functionality is new in v0.5.0 and is primarily intended for use with Polylith 0.2.20 or later.
+> Note: this functionality was added in v0.5.0, for use with Polylith 0.2.20 or later.
 
 By default, this test runner only looks for tests in the `test` directories
 of bricks and projects. You can configure it to also looks for tests in the
@@ -97,14 +96,14 @@ test passes and failures. Test suites can contain a mix of both
 
 ### Polylith 0.2.20+
 
-If you are using the current 0.2.20-SNAPSHOT version of Polylith or later, you can
+You can
 provide these options in `workspace.edn` under the `:test-configs` key, and
 this test runner looks for the `:org.corfield/external-test-runner` key within
 those configurations.
 
 ```clojure
 ;; in your deps.edn file:
-polylith/clj-poly {:mvn/version "0.2.21"}
+polylith/clj-poly {:mvn/version "0.3.0"}
 
 ;; in your workspace.edn file:
 :test {:create-test-runner [org.corfield.external-test-runner.interface/create]}
@@ -120,7 +119,7 @@ directories, or `clojure -M:poly test with:slow` to run only tests defined with 
 `^{:slow true}` metadata. You can combine these options as well: `clojure -M:poly test with:source:slow`.
 
 See [Test configuration](https://cljdoc.org/d/polylith/clj-poly/CURRENT/doc/test-runners#test-configuration)
-in the Polylith 0.2.20-SNAPSHOT documentation for more details.
+in the Polylith documentation for more details.
 
 > Note: whether you use a single value or a vector for `:create-test-runner` matters in Polylith 0.2.20+ when you use the new `with` syntax for test configurations.
 
@@ -138,7 +137,7 @@ ORG_CORFIELD_EXTERNAL_TEST_RUNNER="{:include-src-dir true}" clojure -M:poly test
 
 ## License & Copyright
 
-External test runner copyright (c) 2022-2024, Sean Corfield,
+External test runner copyright (c) 2022-2025, Sean Corfield,
 Apache Source License 2.0.
 
 Colorizer and string util code copyright (c) 2020-2021, Joakim Tengstrand and others, Eclipse Public License 1.0.

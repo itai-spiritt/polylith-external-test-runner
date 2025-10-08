@@ -1,5 +1,4 @@
-*.class
-*.jar
+.calva/mcp-server/port
 .calva/output-window/output.calva-repl
 .calva/repl.calva-repl
 .clj-kondo/.cache
@@ -12,6 +11,8 @@
 .nrepl-port
 .portal/vs-code.edn
 .socket-repl-port
+*.class
+*.jar
 /checkouts/
 /classes/
 /lib/
