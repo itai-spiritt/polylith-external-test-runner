@@ -1,5 +1,8 @@
 # Changes
 
+* v0.8.0 in progress
+  * Update dev/test deps; testing against Polylith 0.3.32.
+
 * v0.7.0 9d885c0 -- 2025-10-08
   * Targets Polylith 0.3.0 and later, with support for dialects.
   * Switch from `bricks-to-test` to `bricks-to-test-all-sources` (a change in Polylith 0.2.22).

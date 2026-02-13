@@ -103,7 +103,7 @@ those configurations.
 
 ```clojure
 ;; in your deps.edn file:
-polylith/clj-poly {:mvn/version "0.3.0"}
+polylith/clj-poly {:mvn/version "0.3.32"}
 
 ;; in your workspace.edn file:
 :test {:create-test-runner [org.corfield.external-test-runner.interface/create]}
