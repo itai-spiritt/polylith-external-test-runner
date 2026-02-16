@@ -3,6 +3,7 @@
   (:require [clojure.java.shell :as shell]
             [clojure.java.io :as io]
             [clojure.edn :as edn]
+            [clojure.string :as str]
             [polylith.clj.core.test-runner-contract.interface :as test-runner-contract]))
 
 (defn shadow-conf-exist? [dir]
@@ -51,8 +52,26 @@
        (filter test-target?)
        set))
 
+(defn install-npm-dependencies [dir install-command]
+  (println (str "Installing dependencies in " dir "..."))
+  (flush)
+  (let [cmd-parts (str/split install-command #"\s+")
+        command (first cmd-parts)
+        args (rest cmd-parts)
+        result (apply shell/sh command (concat args [:dir dir]))]
+    (print (:out result))
+    (flush)
+    (when-not (empty? (:err result))
+      (binding [*out* *err*]
+        (print (:err result))
+        (flush)))
+    (when-not (zero? (:exit result))
+      (throw (Exception. (str "Failed to install dependencies in " dir))))))
+
 (defn run-shadow-tests
-  [dir target aliases]
+  [dir target aliases install-command]
+  (install-npm-dependencies dir install-command)
+
   (mapv (fn [build]
           (let [build-name (-> build first name)
                 alias-str (str "-A" (apply str (interpose ":" (map name aliases))))
@@ -81,6 +100,7 @@
 (defn create [{:keys [project test-settings]}]
   (let [{:keys [paths]} project
         aliases (get test-settings :shadow-cljs-test-runner/aliases [:test])
+        install-command (get test-settings :shadow-cljs-test-runner/install-command "yarn install --frozen-lockfile")
         test-sources-present (-> paths :test seq)]
     (reify test-runner-contract/TestRunner
       (test-runner-name [_]
@@ -98,7 +118,7 @@
           (doseq [target discovered-targets]
             (let [dirs (find-shadow-cljs-bricks-dirs changed-bricks target)]
               (doseq [dir dirs
-                      result (run-shadow-tests dir target aliases)]
+                      result (run-shadow-tests dir target aliases install-command)]
                 (when-not (:success result)
                   (throw (Exception. (format "Tests failed for target %s in project: %s"
                                              target project-name))))))))))))
